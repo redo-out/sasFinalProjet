@@ -40,7 +40,7 @@ do {
             break;
         }
         case 5: {
-
+            rechercherTicket();
             break;
         }
         case 6: {
@@ -157,16 +157,24 @@ function annulerTicket(){
 function rechercherTicket(){
     let name = prompt("entre passager nom : ")
     let ticket = [];
-    for (let indx = 0; indx < tickets.length; i++){
-        if (name == tickets[indx].passangername){
-            ticket += tickets[indx].passangername; 
-        }
+    if (ticket.length == 0){
+        console.log("couldn't find ur ticket");
     }
-    return ticket;
+    for (let indx = 0; indx < tickets.length; indx++){
+        if (name == tickets[indx].passangername){
+            ticket[ticket.length] = tickets[indx]; 
+        }
+        console.log(`
+    Ticket #${ticket[indx].id}
+    Passenger: ${name}
+    Trip: ${ticket[indx].depart} → ${ticket[indx].destination}
+    Seat: ${ticket[indx].Seatnumber}
+    Price: ${ticket[indx].price} DH`);
+    }
 }
-
 function filtrerTrajets(dest){
     let results = [];
+
 
 
 }
