@@ -3,7 +3,6 @@ import { trips } from "./arrayOfObjet.js";
 let prompt = PromptSync();
 import PromptSync from 'prompt-sync';
 
-let ID = 0;
 let tickets = [];
 let n;
 
@@ -93,7 +92,7 @@ function creatTicket(tab, passagerNom, trajetId) {
     for (let indx = 0; indx < tab.length; indx++) {
         if (trajetId == tab[indx].id && verifierSeats(tab[indx].availableSeats) == true) {
             let ticket = {
-                id: ID,
+                id: tickets.length + 1,
                 passangername: passagerNom,
                 tripId: trajetId,
                 depart: tab[indx].departure,
@@ -103,15 +102,14 @@ function creatTicket(tab, passagerNom, trajetId) {
             }
             tickets[tickets.length] = ticket;
             trips[indx].availableSeats--;
-            ID++;
             return `
            Ticket purchased successfully.
 
-Ticket #${ID}
+Ticket #${ticket.id}
 Passenger: ${passagerNom}
 Trip: ${tab[indx].departure} → ${tab[indx].destination}
 Seat: ${ticket.Seatnumber}
-Price: ${tab[indx].price} DH `;
+Price: ${tab[indx].price} DH \n`;
         }
     }
     return "couldn't creat your ticket";
@@ -127,7 +125,7 @@ function desplayTicket() {
     for (let i = 0; i < tickets.length; i++) {
         let ticket = tickets[i];
         showTicket += "\n";
-        showTicket += "Ticket #" + (ticket.id + 1) + "\n";
+        showTicket += "Ticket #" + (ticket.id) + "\n";
         showTicket += "passager : " + ticket.passangername + "\n";
         showTicket += "trajet : " + ticket.depart + " → " + ticket.destination + "\n";
         showTicket += "Place : " + ticket.Seatnumber + "\n";
@@ -137,23 +135,24 @@ function desplayTicket() {
 }
 
 function annulerTicket(){
+    let identif = +prompt("Entre ID: ");
     if (tickets.length <= 0){
         return "aucune ticket";
     }
-    let identif = +prompt("Entre ID: ");
-    let tripId = 0;
-    let found = false;
+    let found = [];
     for (let indx = 0; indx < tickets.length; indx++){
-        if (identif == tickets[indx].ID){
-        tripId == tickets[indx].trajetId;
+        if (identif == tickets[indx].id){
+        found = tickets[indx];
         tickets.splice(indx, 1);
-        trips[tripId].availableSeats += 1;
-        found = true;
         break;
         }
+        if (!found){
+            return "ticket not found";      
+          }
+        }
+        found.availableSeats++;
+        return `Ticket ${identif} annulé avec succès.`;
     }
-    return `Ticket ${identif} annulé avec succès.`;
-}
 
 function rechercherTicket(){
     let name = prompt("entre passager nom : ")
