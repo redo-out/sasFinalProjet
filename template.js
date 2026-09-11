@@ -144,12 +144,7 @@ function annulerTicket() {
     for (let indx = 0; indx < tickets.length; indx++) {
         if (identif === tickets[indx].id) {
             found = tickets[indx];
-            for (let i = 0; i < trips.length; i++) {
-                if (trips[i].id === found.tripId) {
-                    trips[i].availableSeats++;
-                    break;
-                }
-            }
+            trips[indx].availableSeats++;
             tickets.splice(indx, 1);
             break;
         }
@@ -204,14 +199,5 @@ function sortTrips(tab) {
             }
         }
     }
-console.table(tab)
-for (let i = 0; i < tab.length - 1; i++) {
-        for (let j = 0; j < tab.length - 1 - i; j++) {
-            if (tab[j].id > tab[j + 1].id) {
-                let swp = tab[j];
-                tab[j] = tab[j + 1];
-                tab[j + 1] = swp;
-            }
-        }
-    }
+console.table(tab);
 }
