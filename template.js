@@ -5,17 +5,19 @@ import PromptSync from 'prompt-sync';
 
 let tickets = [];
 let n;
-
-console.log("====== Railway Manager ======", '\n');
-console.log("1. Afficher les trajets");
-console.log("2. Acheter un ticket");
-console.log("3. Afficher les tickets");
-console.log("4. Annuler un ticket");
-console.log("5. Rechercher un ticket");
-console.log("6. Filtrer les trajets");
-console.log("7. Trier les trajets");
-console.log("0. Quitter", '\n');
-
+function showMenu() {
+    console.log(`====== Railway Manager ====== \n
+    1. Afficher les trajets :
+    2. Acheter un ticket :
+    3. Afficher les tickets :
+    4. Annuler un ticket :
+    5. Rechercher un ticket :
+    6. Filtrer les trajets :
+    7. Trier les trajets :
+    0. Quitter : \n
+=============================`);
+}
+showMenu();
 do {
 
     n = +prompt('Entrer une choix : ');
@@ -44,31 +46,27 @@ do {
             break;
         }
         case 6: {
-
+            filtrerTrajets(trips);
             break;
         }
         case 7: {
-
+            sortTrips(trips);
             break;
         }
         case 0: {
-
+            console.log("Thanks for using Railway manager");
             break;
         }
-
         default:
             break;
+    }
+    if (n != 0) {
+        showMenu();
     }
 } while (n != 0);
 
 function afficherTragets(tab) {
-    for (let i = 0; i < tab.length; i++) {
-        console.log(`${tab[i].id} ${tab[i].departure} → ${tab[i].destination}`);
-        console.log(`Départ : ${tab[i].departureTime}`);
-        console.log(`Arrivée : ${tab[i].arrivalTime}`);
-        console.log(`Prix : ${tab[i].price} DH`);
-        console.log(`Places disponsibles : ${tab[i].availableSeats}${'\n'}`);
-    }
+console.table(trips)
 }
 
 function verifierId(numId) {
@@ -80,7 +78,6 @@ function verifierId(numId) {
     return false;
 }
 
-
 function verifierSeats(seatNum) {
     if (seatNum > 0) {
         return true;
@@ -91,8 +88,6 @@ function verifierSeats(seatNum) {
 }
 
 function creatTicket(tab, passagerNom, trajetId) {
-
-
     for (let indx = 0; indx < tab.length; indx++) {
         if (trajetId == tab[indx].id && verifierSeats(tab[indx].availableSeats) == true) {
             let ticket = {
@@ -121,9 +116,7 @@ Price: ${tab[indx].price} DH \n`;
     }
 }
 
-
 function desplayTicket() {
-
     if (tickets.length == 0) {
         console.log("there's no tickets");
         return;
@@ -137,6 +130,7 @@ function desplayTicket() {
         showTicket += "trajet : " + ticket.depart + " → " + ticket.destination + "\n";
         showTicket += "Place : " + ticket.Seatnumber + "\n";
         showTicket += "Prix : " + ticket.price + " DH \n";
+        showTicket += "======================";
     }
     console.log(showTicket);
 }
@@ -171,7 +165,6 @@ function rechercherTicket() {
     let result = "";
     for (let i = 0; i < tickets.length; i++) {
         if (name == tickets[i].passangername) {
-            // ticket.push(tickets[i]);
             result += `Ticket #${tickets[i].id}
 Passenger: ${name}
 Trip: ${tickets[i].depart} → ${tickets[i].destination}
@@ -179,17 +172,46 @@ Seat: ${tickets[i].Seatnumber}
 Price: ${tickets[i].price} DH
 ==========================\n`;
         }
-        }
-        if (result == "") {
-            return "couldn't find ur ticket";
+    }
+    if (result == "") {
+        return "couldn't find ur ticket";
     }
     return result;
+}
+
+function filtrerTrajets(tab) {
+    let depar = prompt("Departure City: ")
+    let found = false;
+    for (let i = 0; i < tab.length; i++) {
+        if (depar == tab[i].departure) {
+            console.log(`
+${tab[i].departure} → ${tab[i].destination} : ${tab[i].price} DH`);
+            found = true;
+        }
     }
-//     for (let j = 0; j < tickets.length; j++){
-// }
-function filtrerTrajets(dest) {
-    let results = [];
+    if (found == false) {
+        console.log("aucun trajet trouve");
+    }
+}
 
-
-
+function sortTrips(tab) {
+    for (let i = 0; i < tab.length - 1; i++) {
+        for (let j = 0; j < tab.length - 1 - i; j++) {
+            if (tab[j].price > tab[j + 1].price) {
+                let swp = tab[j];
+                tab[j] = tab[j + 1];
+                tab[j + 1] = swp;
+            }
+        }
+    }
+console.table(tab)
+for (let i = 0; i < tab.length - 1; i++) {
+        for (let j = 0; j < tab.length - 1 - i; j++) {
+            if (tab[j].id > tab[j + 1].id) {
+                let swp = tab[j];
+                tab[j] = tab[j + 1];
+                tab[j + 1] = swp;
+            }
+        }
+    }
 }
